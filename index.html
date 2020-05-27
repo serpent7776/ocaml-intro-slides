@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>Introduction to OCaml programming language</title>
 
 		<link rel="stylesheet" href="css/reset.css">
 		<link rel="stylesheet" href="css/reveal.css">
@@ -25,8 +25,512 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+
+				<section>
+					<h2>Introduction to OCaml programming language</h2>
+					<h6>Krzysztof Leśniak</h6>
+					<p><a href="https://twitter.com/serpent7776" target="_blank"><small>@Serpent7776</small></a></p>
+					<p><small>fp-wroc meetup</small></p>
+					<p><small>26.05.2020</small></p>
+				</section>
+
+				<section>
+					<blockquote cite="https://www.youtube.com/watch?v=qO-9yiAOQqc">
+						<p>I'm not an expert,<br>I'm just a dude</p>
+						<footer><small>- Scott Schurr, CppCon 2015</small></footer>
+					</blockquote>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/qO-9yiAOQqc?start=94" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</section>
+
+				<section>
+					<h3>OCaml</h3>
+					<section>
+						<blockquote>OCaml is a general purpose programming language with an emphasis on expressiveness and safety</blockquote>
+						<small><a href="https://ocaml.org/learn/description.html" target="_blank">source</a></small>
+					</section>
+				</section>
+
+				<section>
+					<h3>Some features</h3>
+					<section>
+						<ul>
+							<li>Static typing + type inference</li>
+							<li class="fragment">Automatic memory management</li>
+							<li class="fragment">REPL</li>
+							<li class="fragment">Efficient native code compiler</li>
+							<li class="fragment">Safety</li>
+							<li class="fragment">Imperative features</li>
+							<li class="fragment">Object oriented capabilities</li>
+							<li class="fragment">Exceptions</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<h3>Type inference</h3>
+					<section>
+						<pre><code data-trim data-line-numbers="" class="ocaml">
+# let n = 1;;
+val n : int = 1
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# let f = 1.1;;
+val f : float = 1.1
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# let s = "hello";;
+val s : string = "hello"
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# fun x -> x + 2;;
+- : int -> int = &lt;fun&gt;
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# fun x y -> x + y;;
+- : int -> int -> int = &lt;fun&gt;
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<h3>Functions</h3>
+					<section>
+						<pre><code data-trim data-line-numbers="" class="ocaml">
+# let add = fun x y -> x + y;;
+val add : int -> int -> int = &lt;fun&gt;
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# let add x y = x + y;;
+val add : int -> int -> int = &lt;fun&gt;
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# add 3 5;;
+- : int = 8
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# add (add 1 2) (add 3 4);;
+- : int = 10
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<h3>Currying</h3>
+					<section>
+						<pre><code data-trim data-line-numbers="" class="ocaml">
+# let add x y = x + y;;
+val add : int -> int -> int = &lt;fun&gt;
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# let add x = fun y -> x + y;;
+val add : int -> int -> int = &lt;fun&gt;
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# let add2 = add 2;;
+val add2 : int -> int = &lt;fun&gt;
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# add2 5;;
+- : int = 7
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<h3>Recursive functions</h3>
+					<section>
+						<pre><code data-trim data-line-numbers="" class="ocaml">
+let rec factorial n =
+        if n > 0 then
+                n * factorial (n - 1)
+        else
+                1
+						</code></pre>
+						<div class="fragment">
+							<pre><code data-trim data-line-numbers="" class="ocaml">
+let rec is_even x =
+        if x = 0 then true else is_odd (x - 1)
+and is_odd x =
+        if x = 0 then false else is_even (x - 1)
+							</code></pre>
+							<small><a href="https://v1.realworldocaml.org/v1/en/html/variables-and-functions.html#recursive-functions" target="_blank">source</a></small>
+						</div>
+					</section>
+				</section>
+
+				<section>
+					<h3>Custom operators</h3>
+					<section>
+						<pre><code data-trim data-line-numbers="" class="ocaml">
+let (++) x y =
+        2 * (x + y)
+in
+2 ++ 3
+						</code></pre>
+						<pre class="fragment">10</pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+let cond_expr = (ws varname) >>= fun name ->
+        (ws eqeq) *> (ws literal) >>| fun v ->
+        Eq (name, v)
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<h3>Pattern matching</h3>
+					<section>
+						<pre><code data-trim data-line-numbers="" class="ocaml">
+let rec fact n =
+        match n with
+        | 0 -> 1
+        | 1 -> 1
+        | k -> k * fact (k - 1)
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+let rec fact = function
+        | 0 -> 1
+        | 1 -> 1
+        | k -> k * fact (k - 1)
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+let rec sum = function
+        | [] -> 0
+        | hd :: tl -> hd + sum tl
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<h3>Type system</h3>
+					<section>
+						<pre><code data-trim data-line-numbers="" class="ocaml">
+# 1 + 2 + 3;;
+- : int = 6
+						</code></pre>
+						<pre class="fragment"><code data-trim data-noescape data-line-numbers="" class="ocaml">
+# 1.0 + 2.0;;
+						</code></pre>
+						<pre class="fragment">
+1.0 + 2.0;;
+^^^
+Error: This expression has type float
+but an expression was expected of type int
+						</pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# (+);;
+- : int -> int -> int = &lt;fun&gt;
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# (+.);;
+- : float -> float -> float = &lt;fun&gt;
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# 1.2 +. 1.3;;
+- : float = 2.5
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<h3>Type system</h3>
+					<section>
+						<pre><code data-trim data-line-numbers="" class="ocaml">
+# 1 + 1.0;;
+						</code></pre>
+						<pre class="fragment">
+1 + 1.0;;
+    ^^^
+Error: This expression has type float
+but an expression was expected of type int
+						</pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# float_of_int;;
+- : int -> float = &lt;fun&gt;
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# (float_of_int 1) +. 1.0;;
+- : float = 2.
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<h3>String formatting</h3>
+					<section>
+						<pre><code data-trim data-line-numbers="" class="ocaml">
+# let x = 1;;
+val x : int = 1
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# "value of x is " ^ (string_of_int x);;
+- : string = "value of x is 1"
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# Printf.sprintf "value of x is %d" x;;
+- : string = "value of x is 1"
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# Printf.sprintf "%d, %.1f, %s\n" 12 1.5 "hello";;
+- : string = "12, 1.5, hello\n"
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# Printf.sprintf "%d" 1.5;;
+						</code></pre>
+						<pre class="fragment">
+Printf.sprintf "%d" 1.5;;
+                    ^^^
+Error: This expression has type float
+but an expression was expected of type int
+						</pre>
+					</section>
+				</section>
+
+				<section>
+					<h3>Formatted Output</h3>
+					<section>
+						<pre><code data-trim data-line-numbers="" class="ocaml">
+# let name = "Chris" in
+        Printf.printf "Hello, %s\n" name;;
+						</code></pre>
+						<pre>
+Hello, Chris
+						</pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# Printf.printf "Hello, %s\n" 42;;
+						</code></pre>
+						<pre class="fragment">
+Printf.printf "Hello, %s\n" 42;;
+                            ^^
+Error: This expression has type int
+but an expression was expected of type string
+						</pre>
+					</section>
+				</section>
+
+				<section>
+					<h3>Formatted Input</h3>
+					<section>
+						<pre><code data-trim data-line-numbers="" class="ocaml">
+# Scanf.scanf "%s" (fun s ->
+        Printf.printf "hello, %s\n" s
+);;
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# Scanf.scanf "%s %s" (fun s1 s2 ->
+        Printf.printf "hello %s and %s\n" s1 s2
+);;
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<h3>Imperative features</h3>
+					<section>
+						<pre><code data-trim data-line-numbers="" class="ocaml">
+let factorial n =
+        let result = ref 1 in
+        for i = 2 to n do
+                result := !result * i
+        done;
+        !result
+in
+Printf.printf "%d\n" (factorial 6)
+						</code></pre>
+						<pre class="fragment">720</pre>
+					</section>
+				</section>
+
+				<section>
+					<h3>Variants</h3>
+					<section>
+						<pre><code data-trim data-line-numbers="" class="ocaml">
+# [1; 2; 3];;
+- : int list = [1; 2; 3]
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# [1; 2; "foo"];;
+						</code></pre>
+						<pre class="fragment">
+[1; 2; "foo"];;
+       ^^^^^
+Error: This expression has type string
+but an expression was expected of type int
+						</pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+type variant =
+        | Int of int
+        | String of string
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+let ls = [Int 1; Int 2; String "foo"]
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<h3>Recursive variants</h3>
+					<section>
+						<pre><code data-trim data-line-numbers="" class="ocaml">
+type binary_tree =
+    | Leaf of int
+    | Tree of binary_tree * binary_tree
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# Tree ((Leaf 1), (Leaf 2));;
+- : binary_tree = Tree (Leaf 1, Leaf 2)
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<h3>Parametrized variants</h3>
+					<section>
+						<pre><code data-trim data-line-numbers="" class="ocaml">
+type 'a binary_tree =
+    | Leaf of 'a
+    | Tree of 'a binary_tree * 'a binary_tree
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# Tree ((Leaf 1), (Leaf 2));;
+- : int binary_tree = Tree (Leaf 1, Leaf 2)
+						</code></pre>
+						<pre class="fragment"><code data-trim data-line-numbers="" class="ocaml">
+# Tree ((Leaf "foo"), (Leaf "bar"));;
+- : string binary_tree = Tree (Leaf "foo", Leaf "bar")
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<h3>Example - factorial</h3>
+					<section data-transition="fade" data-transition-speed="fast">
+						<pre><code data-trim data-line-numbers="1-5" class="ocaml">
+let rec fact = function
+        | 0 -> 1
+        | 1 -> 1
+        | n -> n * fact (n - 1)
+in
+Scanf.scanf "%d" (fun n ->
+        Printf.printf "%d\n" (fact n)
+)
+						</code></pre>
+					</section>
+					<section data-transition="fade" data-transition-speed="fast">
+						<pre><code data-trim data-line-numbers="1-6" class="ocaml">
+let fact n =
+        let rec proc acc = function
+                | 0|1 -> acc
+                | k -> proc (k * acc) (k - 1)
+        in proc 1 n
+in
+Scanf.scanf "%d" (fun n ->
+        Printf.printf "%d\n" (fact n)
+)
+						</code></pre>
+					</section>
+					<section data-transition="fade" data-transition-speed="fast">
+						<pre><code data-trim data-line-numbers="2-5" class="ocaml">
+let fact n =
+        if n &lt; 0 then
+                raise (Invalid_argument
+                        "negative number given")
+        else
+                let rec proc acc = function
+                        | 0|1 -> acc
+                        | k -> proc (k * acc) (k - 1)
+                in proc 1 n
+in
+Scanf.scanf "%d" (fun n ->
+        Printf.printf "%d\n" (fact n)
+)
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<h3>Example - fizzbuzz</h3>
+					<section>
+						<pre><code data-trim data-line-numbers="1-6" class="ocaml">
+let fizzbuzz i = match (i mod 3, i mod 5) with
+        | (0,0) -> "fizzbuzz"
+        | (_,0) -> "buzz"
+        | (0,_) -> "fizz"
+        | (_,_) -> string_of_int i
+in
+let print_fizzbuzz i =
+        print_endline (fizzbuzz i)
+in
+Scanf.scanf "%i" print_fizzbuzz
+						</code></pre>
+						<small><a href="https://gist.github.com/philtomson/1021309" target="_blank">source</a></small>
+					</section>
+				</section>
+
+				<section>
+					<h3>Tools</h3>
+					<section>
+						<dl>
+							<dt>opam</dt>
+							<dd>package management and switch management</dd>
+							<div class="fragment">
+								<dt>dune</dt>
+								<dd>popular build system for ocaml</dd>
+							</div>
+							<div class="fragment">
+								<dt>js_of_ocaml, bucklescript</dt>
+								<dd>ocaml to javascript transpiler</dd>
+							</div>
+							<div class="fragment">
+								<dt>merlin</dt>
+								<dd>IDE features for Vim, Emacs and other</dd>
+							</div>
+							<div class="fragment">
+								<dt>utop</dt>
+								<dd>awesome interactive mode for ocaml</dd>
+							</div>
+						</dl>
+					</section>
+				</section>
+
+				<section>
+					<h3>Real world usages</h3>
+					<ul>
+						<li>ocaml <a href="https://github.com/ocaml/ocaml/tree/trunk/stdlib">standard library</a></li>
+						<li class="fragment"><a href="https://haxe.org/">haxe</a> programming language compiler</li>
+						<li class="fragment"><a href="https://coq.inria.fr/">coq</a> formal proof management system</li>
+						<li class="fragment"><a href="https://mirage.io/">MirageOS</a> library operating system for building unikernels</li>
+						<li class="fragment"><a href="http://www.fftw.org/">fftw</a> library for computing the discrete Fourier transform</li>
+						<li class="fragment"><a href="https://github.com/facebook/flow">flow</a> type checker for javascript</li>
+						<li class="fragment"><a href="https://github.com/facebook/pyre-check">pyre</a> type checker for python</li>
+						<li class="fragment"><a href="https://www.janestreet.com/">Jane Street Capital</a> high-frequency trading company</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3>Web</h3>
+					<ul>
+						<li><a href="https://ocaml.org/" target="_blank">https://ocaml.org/</a></li>
+						<li class="fragment"><a href="https://www.typerex.org/cheatsheets.html" target="_blank">https://www.typerex.org/cheatsheets.html</a></li>
+						<li class="fragment"><a href="https://dev.realworldocaml.org/" target="_blank">https://dev.realworldocaml.org/</a></li>
+						<li class="fragment"><a href="http://caml.inria.fr/pub/docs/manual-ocaml/index.html" target="_blank">http://caml.inria.fr/pub/docs/manual-ocaml/index.html</a></li>
+						<li class="fragment"><a href="https://ocaml.org/learn/tutorials/99problems.html" target="_blank">https://ocaml.org/learn/tutorials/99problems.html</a></li>
+						<li class="fragment"><a href="https://sketch.sh/" target="_blank">https://sketch.sh/</a></li>
+						<li class="fragment"><a href="https://benchmarksgame-team.pages.debian.net/benchmarksgame/fastest/ocaml-ghc.html" target="_blank">https://benchmarksgame-team.pages.debian.net/benchmarksgame/fastest/ocaml-ghc.html</a></li>
+					</ul>
+				</section>
+
+				<section>
+					<q>A language that doesn't affect the way you think about programming is not worth knowing.</q>
+					<p>Alan J. Perlis, Epigrams on Programming, 1982</p>
+				</section>
+
+				<section>
+					<h2>Thank you</h2>
+					<div><small><a href="https://twitter.com/serpent7776" target="_blank">@Serpent7776</a></small></div>
+					<div><small><a href="https://serpent7776.itch.io/" target="_blank">https://serpent7776.itch.io/</a></small></div>
+					<div><small><a href="https://dev.to/serpent7776" target="_blank">https://dev.to/serpent7776</a></small></div>
+				</section>
+
 			</div>
 		</div>
 
@@ -37,6 +541,12 @@
 			// - https://github.com/hakimel/reveal.js#configuration
 			// - https://github.com/hakimel/reveal.js#dependencies
 			Reveal.initialize({
+				controlsTutorial: false,
+				slideNumber: true,
+				hash: true,
+				hashOneBasedIndex: true,
+				transition: 'none',
+				transitionSpeed: 'fast',
 				dependencies: [
 					{ src: 'plugin/markdown/marked.js' },
 					{ src: 'plugin/markdown/markdown.js' },
